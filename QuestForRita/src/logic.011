@@ -1,0 +1,197 @@
+// ****************************************************************************
+//
+// Logic 6: Waitrose
+//
+// ****************************************************************************
+
+#include "defines.txt"
+#define crazy_lady o1
+
+if (new_room) {
+  load.pic(room_no);
+  draw.pic(room_no);
+  discard.pic(room_no);
+  set.horizon(37);
+
+ if (prev_room_no == 10) {
+     v6 = 1;
+     position(ego,59,164);
+ }
+
+  draw(ego);
+  show.pic();
+
+  //Draw crazy trolly woman
+  animate.obj(crazy_lady);
+  load.view(24);
+  set.view(crazy_lady,24);
+  set.loop(crazy_lady,0); 
+  set.cel(crazy_lady,0); 
+  position(crazy_lady,67,77); 
+  set.priority(crazy_lady,10);
+  ignore.objs(crazy_lady);
+  draw(crazy_lady); 
+
+  if (isset(lou_accepted_invite) && !isset(lou_tought_crazy_lady)) {
+      //Draw lou
+      animate.obj(lou);
+      load.view(8);
+      set.view(lou,8);
+      set.loop(lou,0); 
+      set.cel(lou,0); 
+      position(lou,65,161); 
+      set.priority(lou,14);
+      ignore.objs(lou);
+      draw(lou); 
+
+      move.obj(lou, 54, 77, 1, lou_reached_target);
+      stop.cycling(crazy_lady);
+  }
+  else {
+     wander(crazy_lady);
+  }
+
+  reset(lou_reached_target);
+
+  if (isset(johannes_going_to_cook))
+  {
+       animate.obj(johannes);
+       load.view(5);
+       set.view(johannes,5);
+       set.loop(johannes,0); 
+       set.cel(johannes,0); 
+       get.posn(ego, v30, v31);
+       addn(v30,5);
+       position.v(johannes,v30,v31); 
+       set.priority(johannes,11);
+       ignore.objs(johannes);
+       draw(johannes);
+       reset(johannes_reached_target);
+       get.posn(ego, v30, v31);
+       move.obj.v(johannes, v30, v31, 2, johannes_reached_target);
+  }
+}
+
+if (isset(johannes_going_to_cook)) {
+   get.posn(johannes, johannes_x, johannes_y);
+   get.posn(ego, v30, v31);
+
+   if (greaterv(v30, johannes_x)) {
+      subv(v30, johannes_x);
+      assignv(johannes_distx, v30);
+   }
+   else {
+      subv(johannes_x, v30);
+      assignv(johannes_distx, johannes_x);
+   }
+
+   if (greaterv(v31, johannes_y)) {
+      subv(v31, johannes_y);
+      assignv(johannes_disty, v31);
+   }
+   else {
+      subv(johannes_y, v31);
+      assignv(johannes_disty, johannes_y);
+  }
+
+   if (lessn(johannes_distx, 5) && lessn(johannes_disty, 5)) {
+      stop.cycling(johannes);
+      stop.motion(johannes);
+   }
+
+   if ((!lessn(johannes_distx, 7) || !lessn(johannes_disty, 7))) {
+      start.cycling(johannes);
+      get.posn(ego, v30, v31);
+      move.obj.v(johannes, v30, v31, 2, johannes_reached_target);
+   }
+}
+
+if (isset(lou_reached_target) && !isset(crazy_lady_needs_pin)) {
+    set(crazy_lady_needs_pin);
+    set(lou_tought_crazy_lady);
+    reset(lou_accepted_invite);
+    print("Lou: Hey crazy lady, this is how you sing.");
+    print("Lou: Schubi do bub bub dodobi da do. Yeeaaaa.");
+    print("Crazy lady: Thanks! Now let me get that chicken for you.");
+    print("(Rumaging...)");
+    print("Crazy lady: Oh nips! I have forgotton the pin code to my handbag. I had it written on a small piece of paper, but I must have dropped it last night on account of being completely battered.");
+    print("Crazy lady: You might be able to find it at my favourite drinking establishment in Portswood.");
+    stop.cycling(lou);
+}
+
+get.posn(ego, v30, v31);
+
+if (said("look")) {
+    print("You are in the waitrose car park. There is a crazy trolly woman singing.");
+}
+
+if (said("speak", "crazy", "trolly", "woman")) {
+    if (!isset(lou_tought_crazy_lady)) {
+        if (!isset(crazy_lady_wants_lessons)) {
+           print("Faye: Hello, I need to get into waitrose to buy a chicken, can you let me in please.");
+           print("Crazy lady: Mr lover lover, Mr lover lover.");
+           print("Crazy lady: She call me Mr. Boombastic say me fantastic, touch me on me butt she say I'm Mr. Ro...mantic");
+           print("Crazy lady: Mr lover lover, Mr lover lover");
+           print("Faye: Jesus!");
+           print("Crazy lady: I know, I was a little off key on the Ro...mantic part. I could do with some singing lessons.");
+           print("Faye: Yes, now can you let me in so I can get a chicken?");
+           print("Crazy lady: Waitrose is shut now.");
+           print("Faye: Oh nips!");
+           print("Crazy lady: I happen to have a chicken here in my handbag. You can have it if you get me some singing lessons.");
+           set(crazy_lady_wants_lessons);
+        }
+        else {
+             print("Have you got me some singing lessons yet?");
+        }
+    }
+    else {
+        if ((has("chicken") || isset(johannes_got_chicken))) {
+             print("What can I do you for?");
+        }
+        else {
+           print("What is my PIN?");
+           get.num("PIN:", pin_input);
+           if (pin_input == 174) {
+               print("Yup that's the ticket! Here's the chicken");
+               get("chicken");
+               print("You got a chicken!");
+           }
+           else {
+               print("Nope, that doesn't seem to be correct!");
+           }
+        }
+    }
+}
+
+if (ego_edge_code == bottom_edge) {
+  new.room(10);
+}
+
+return();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

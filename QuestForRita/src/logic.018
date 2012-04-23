@@ -1,0 +1,236 @@
+// ****************************************************************************
+//
+// Logic 6: Paul's House
+//
+// ****************************************************************************
+
+#include "defines.txt"
+#define paul   o3
+
+if (new_room) {
+  load.pic(room_no);
+  draw.pic(room_no);
+  discard.pic(room_no);
+  set.horizon(37);
+
+
+ if (prev_room_no == 9) {
+     v6 = 7;
+     position(ego,157,108);
+ }
+
+  draw(ego);
+  show.pic();
+
+    animate.obj(paul);
+    load.view(6);
+    set.view(paul,6);
+    set.loop(paul,0); 
+    set.cel(paul,0); 
+    position(paul,70,106); 
+    set.priority(paul,9);
+    ignore.objs(paul);
+    draw(paul); 
+    reset(paul_reached_target);
+    move.obj(paul, 13, 106, 1, paul_reached_target);
+
+  if (isset(johannes_going_to_cook))
+  {
+       animate.obj(johannes);
+       load.view(5);
+       set.view(johannes,5);
+       set.loop(johannes,0); 
+       set.cel(johannes,0); 
+       get.posn(ego, v30, v31);
+       addn(v30,5);
+       position.v(johannes,v30,v31); 
+       set.priority(johannes,11);
+       ignore.objs(johannes);
+       draw(johannes);
+       reset(johannes_reached_target);
+       get.posn(ego, v30, v31);
+       move.obj.v(johannes, v30, v31, 2, johannes_reached_target);
+  }
+
+  if (isset(lou_accepted_invite))
+  {
+       animate.obj(lou);
+       load.view(8);
+       set.view(lou,8);
+       set.loop(lou,0); 
+       set.cel(lou,0); 
+       get.posn(ego, v30, v31);
+       addn(v30,5);
+       position.v(lou,v30,v31); 
+       set.priority(lou,11);
+       ignore.objs(lou);
+       draw(lou);
+       reset(lou_reached_target);
+       get.posn(ego, v30, v31);
+       move.obj.v(lou, v30, v31, 2, lou_reached_target);
+  }
+}
+
+if (isset(johannes_going_to_cook)) {
+   get.posn(johannes, johannes_x, johannes_y);
+   get.posn(ego, v30, v31);
+
+   if (greaterv(v30, johannes_x)) {
+      subv(v30, johannes_x);
+      assignv(johannes_distx, v30);
+   }
+   else {
+      subv(johannes_x, v30);
+      assignv(johannes_distx, johannes_x);
+   }
+
+   if (greaterv(v31, johannes_y)) {
+      subv(v31, johannes_y);
+      assignv(johannes_disty, v31);
+   }
+   else {
+      subv(johannes_y, v31);
+      assignv(johannes_disty, johannes_y);
+  }
+
+   if (lessn(johannes_distx, 5) && lessn(johannes_disty, 5)) {
+      stop.cycling(johannes);
+      stop.motion(johannes);
+   }
+
+   if ((!lessn(johannes_distx, 7) || !lessn(johannes_disty, 7))) {
+      start.cycling(johannes);
+      get.posn(ego, v30, v31);
+      move.obj.v(johannes, v30, v31, 2, johannes_reached_target);
+   }
+}
+
+if (isset(lou_accepted_invite)) {
+   get.posn(lou, lou_x, lou_y);
+   get.posn(ego, v30, v31);
+
+   if (greaterv(v30, lou_x)) {
+      subv(v30, lou_x);
+      assignv(lou_distx, v30);
+   }
+   else {
+      subv(lou_x, v30);
+      assignv(lou_distx, lou_x);
+   }
+
+   if (greaterv(v31, lou_y)) {
+      subv(v31, lou_y);
+      assignv(lou_disty, v31);
+   }
+   else {
+      subv(lou_y, v31);
+      assignv(lou_disty, lou_y);
+  }
+
+   if (lessn(lou_distx, 5) && lessn(lou_disty, 5)) {
+      stop.cycling(lou);
+      stop.motion(lou);
+   }
+
+   if ((!lessn(lou_distx, 7) || !lessn(lou_disty, 7))) {
+      start.cycling(lou);
+      get.posn(ego, v30, v31);
+      move.obj.v(lou, v30, v31, 2, lou_reached_target);
+   }
+}
+
+if (isset(paul_reached_target)) {
+   if (posn(paul, 70, 106, 70, 106)) {
+       reset(paul_reached_target);
+       move.obj(paul, 13, 106, 1, paul_reached_target);
+   }
+   else {
+      if (posn(paul, 13, 106, 13, 106)) {
+          reset(paul_reached_target);
+          move.obj(paul, 70, 106, 1, paul_reached_target);
+      }
+   }
+}
+
+get.posn(ego, v30, v31);
+
+if (said("look")) {
+   print("You are outside Paul's house.");
+}
+
+if (said("use", "car")) {
+  reset(if_handled);
+  if ((v30 > 133) && (v30 < 159) && (v31 > 105))
+  {
+    new.room(9);
+    set(if_handled);
+  }
+
+  if (!isset(if_handled))
+  {
+    print("What car?");
+  }
+}
+
+if (said("look", "car")) {
+   print("Your shiny red car is parked one trillion meters away from the curb. Paul's car is parked one fempto metre from the curb.");
+}
+
+if (said("speak","paul")) {
+    if(has("spondulix")) {
+        print("Quick! Give me the spondulix.");
+    }
+    else {
+        if (!isset(tobias_door_open)) {
+           if (!isset(faye_spoken_to_paul)) {
+              print("Faye: Rita flew away and I don't know how to get her back.");
+              print("Paul: Don't worry, as it happens I have just bought a chicken catcherer for my car from halfords, it was on offer!");
+              print("Paul: The only problem is that in the process of installing it I have broken the spondulix.");
+              print("Paul: You go and get a new one while I finish isntalling it.");
+              set(faye_spoken_to_paul);
+           }
+           else {
+               print("Have you got the spondulix yet?");
+           }
+        }
+        else {
+           if (has("sunglasses")) {
+              print("Nice glasses! Put them on and lets go and catch a chicken.");
+              print("To fire the chicken catcherer shout: FIRE CATCHERER to me.");
+              //Load chicken catching endgame sequence
+              new.room(22);
+           }
+           else {
+              print("You are gonna need some sunglasses to protect your eyeballs!");
+          }
+        }
+    }
+}
+
+if (said("give","spondulix") && has("spondulix"))
+{
+    drop("spondulix");
+    print("Paul: The spondulix, awsome!");
+    print("Paul: Unfortunatly, I broke many other things whilst fitting the chicken catcherer, including the roof.");
+    print("Paul: You will need to get some sunglasses to protect your eyeballs when driving at high speed");
+    set(tobias_door_open);
+}
+
+return();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

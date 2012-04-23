@@ -1,0 +1,264 @@
+// ****************************************************************************
+//
+// Logic 6: Hall
+//
+// ****************************************************************************
+
+#include "defines.txt"
+
+if (new_room) {
+  load.pic(room_no);
+  draw.pic(room_no);
+  discard.pic(room_no);
+  set.horizon(37);
+
+ if (prev_room_no == 5) {
+     v6 = 1;
+     position(ego,89,150);
+ }
+
+ if (prev_room_no == 8)  {
+     v6 = 3;
+     position(ego,20,150);
+}
+
+ if (prev_room_no == 7)  {
+     v6 = 3;
+     position(ego,41,85);
+}
+
+ if (prev_room_no == 9)  {
+     v6 = 5;
+     position(ego,67,68);
+}
+
+ if (prev_room_no == 13)  {
+     v6 = 7;
+     position(ego,94,75);
+}
+
+  draw(ego);
+  show.pic();
+
+  if (isset(johannes_going_to_cook))
+  {
+       animate.obj(johannes);
+       load.view(5);
+       set.view(johannes,5);
+       set.loop(johannes,0); 
+       set.cel(johannes,0); 
+       get.posn(ego, v30, v31);
+       addn(v30,5);
+       position.v(johannes,v30,v31); 
+       set.priority(johannes,8);
+       ignore.objs(johannes);
+       draw(johannes);
+       reset(johannes_reached_target);
+       get.posn(ego, v30, v31);
+       move.obj.v(johannes, v30, v31, 2, johannes_reached_target);
+  }
+
+  if (isset(lou_accepted_invite))
+  {
+       animate.obj(lou);
+       load.view(8);
+       set.view(lou,8);
+       set.loop(lou,0); 
+       set.cel(lou,0); 
+       get.posn(ego, v30, v31);
+       addn(v30,5);
+       position.v(lou,v30,v31); 
+       set.priority(lou,8);
+       ignore.objs(lou);
+       draw(lou);
+       reset(lou_reached_target);
+       get.posn(ego, v30, v31);
+       move.obj.v(lou, v30, v31, 2, lou_reached_target);
+  }
+}
+
+if (isset(johannes_going_to_cook)) {
+   get.posn(johannes, johannes_x, johannes_y);
+   get.posn(ego, v30, v31);
+
+   if (greaterv(v30, johannes_x)) {
+      subv(v30, johannes_x);
+      assignv(johannes_distx, v30);
+   }
+   else {
+      subv(johannes_x, v30);
+      assignv(johannes_distx, johannes_x);
+   }
+
+   if (greaterv(v31, johannes_y)) {
+      subv(v31, johannes_y);
+      assignv(johannes_disty, v31);
+   }
+   else {
+      subv(johannes_y, v31);
+      assignv(johannes_disty, johannes_y);
+  }
+
+   if (lessn(johannes_distx, 5) && lessn(johannes_disty, 5)) {
+      stop.cycling(johannes);
+      stop.motion(johannes);
+   }
+
+   if ((!lessn(johannes_distx, 7) || !lessn(johannes_disty, 7))) {
+      start.cycling(johannes);
+      get.posn(ego, v30, v31);
+      move.obj.v(johannes, v30, v31, 2, johannes_reached_target);
+   }
+}
+
+if (isset(lou_accepted_invite)) {
+   get.posn(lou, lou_x, lou_y);
+   get.posn(ego, v30, v31);
+
+   if (greaterv(v30, lou_x)) {
+      subv(v30, lou_x);
+      assignv(lou_distx, v30);
+   }
+   else {
+      subv(lou_x, v30);
+      assignv(lou_distx, lou_x);
+   }
+
+   if (greaterv(v31, lou_y)) {
+      subv(v31, lou_y);
+      assignv(lou_disty, v31);
+   }
+   else {
+      subv(lou_y, v31);
+      assignv(lou_disty, lou_y);
+  }
+
+   if (lessn(lou_distx, 5) && lessn(lou_disty, 5)) {
+      stop.cycling(lou);
+      stop.motion(lou);
+   }
+
+   if ((!lessn(lou_distx, 7) || !lessn(lou_disty, 7))) {
+      start.cycling(lou);
+      get.posn(ego, v30, v31);
+      move.obj.v(lou, v30, v31, 2, lou_reached_target);
+   }
+}
+
+get.posn(ego, v30, v31);
+
+if (said("look")) {
+   if(!isset(jeff_free)) {
+      print("You are in the hallway. There is a lot of flailing coming from Jeff's room");
+   }
+   else {
+      print("You are in the hallway.");
+   }
+}
+
+if (said("use", "blowtorch")) {
+   if (has("blowtorch")) {
+      if (!isset(stairs_unblocked)) {
+         set(stairs_unblocked);
+         print("You burned the farnell boxes.");
+      }
+      else {
+         print("You have already burnt all of the boxes.");
+      }
+   }
+   else {
+      print("You don't have a blowtorch.");
+   }
+}
+
+if (said("open", "door")) {
+  reset(if_handled);
+  if ((v30 < 17) && (v31 > 133) && (v31 < 166))
+  {
+    if (isset(tobias_wants_dinner))
+    {
+       new.room(8);
+     }
+     else
+     {
+        print("Cannot open, the door is locked.");
+      }
+    set(if_handled);
+  }
+ 
+ if ((v30 < 42) && (v31 > 76) && (v31 < 96))
+  {
+     new.room(7);
+     set(if_handled);
+  }
+
+  if ((v30 < 76) && (v30 > 58) && (v31 < 73))
+  {
+     if (has("keys")) {
+         new.room(9);
+     }
+     else
+     {
+         print("Cannot open, the door is locked.");
+     }
+     set(if_handled);
+  }
+
+  if (!isset(if_handled))
+  {
+    print("What door?");
+  }
+}
+
+
+ if ((v30 > 90) && (v31 > 90) && (v31 < 96))
+ {
+   if (isset(stairs_unblocked)) {
+      new.room(13);
+   }
+   else {
+       if (v6 != 8) {
+          print("There is a huge number of farnell boxes blocking the stairway");
+          v6 = 8;
+       }
+   }
+ }
+
+
+if (ego_edge_code == bottom_edge) {   // ego touching bottom edge of screen
+  new.room(5);
+}
+
+return();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

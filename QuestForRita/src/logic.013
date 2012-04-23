@@ -1,0 +1,194 @@
+// ****************************************************************************
+//
+// Logic 6: Landing
+//
+// ****************************************************************************
+
+#include "defines.txt"
+
+if (new_room) {
+  load.pic(room_no);
+  draw.pic(room_no);
+  discard.pic(room_no);
+  set.horizon(37);
+
+ if (prev_room_no == 6) {
+     v6 = 1;
+     position(ego,43,117);
+ }
+
+ if (prev_room_no == 14) {
+     v6 = 5;
+     position(ego,72,95);
+ }
+
+ if (prev_room_no == 19) {
+     v6 = 7;
+     position(ego,112,110);
+ }
+
+ if (prev_room_no == 15) {
+     v6 = 1;
+     position(ego,90,166);
+ }
+
+  draw(ego);
+  show.pic();
+
+  if (isset(johannes_going_to_cook))
+  {
+       animate.obj(johannes);
+       load.view(5);
+       set.view(johannes,5);
+       set.loop(johannes,0); 
+       set.cel(johannes,0); 
+       get.posn(ego, v30, v31);
+       addn(v30,5);
+       position.v(johannes,v30,v31); 
+       set.priority(johannes,11);
+       ignore.objs(johannes);
+       draw(johannes);
+       reset(johannes_reached_target);
+       get.posn(ego, v30, v31);
+       move.obj.v(johannes, v30, v31, 2, johannes_reached_target);
+  }
+
+  if (isset(lou_accepted_invite))
+  {
+       animate.obj(lou);
+       load.view(8);
+       set.view(lou,8);
+       set.loop(lou,0); 
+       set.cel(lou,0); 
+       get.posn(ego, v30, v31);
+       addn(v30,5);
+       position.v(lou,v30,v31); 
+       set.priority(lou,11);
+       ignore.objs(lou);
+       draw(lou);
+       reset(lou_reached_target);
+       get.posn(ego, v30, v31);
+       move.obj.v(lou, v30, v31, 2, lou_reached_target);
+  }
+}
+
+if (isset(johannes_going_to_cook)) {
+   get.posn(johannes, johannes_x, johannes_y);
+   get.posn(ego, v30, v31);
+
+   if (greaterv(v30, johannes_x)) {
+      subv(v30, johannes_x);
+      assignv(johannes_distx, v30);
+   }
+   else {
+      subv(johannes_x, v30);
+      assignv(johannes_distx, johannes_x);
+   }
+
+   if (greaterv(v31, johannes_y)) {
+      subv(v31, johannes_y);
+      assignv(johannes_disty, v31);
+   }
+   else {
+      subv(johannes_y, v31);
+      assignv(johannes_disty, johannes_y);
+  }
+
+   if (lessn(johannes_distx, 5) && lessn(johannes_disty, 5)) {
+      stop.cycling(johannes);
+      stop.motion(johannes);
+   }
+
+   if ((!lessn(johannes_distx, 7) || !lessn(johannes_disty, 7))) {
+      start.cycling(johannes);
+      get.posn(ego, v30, v31);
+      move.obj.v(johannes, v30, v31, 2, johannes_reached_target);
+   }
+}
+
+if (isset(lou_accepted_invite)) {
+   get.posn(lou, lou_x, lou_y);
+   get.posn(ego, v30, v31);
+
+   if (greaterv(v30, lou_x)) {
+      subv(v30, lou_x);
+      assignv(lou_distx, v30);
+   }
+   else {
+      subv(lou_x, v30);
+      assignv(lou_distx, lou_x);
+   }
+
+   if (greaterv(v31, lou_y)) {
+      subv(v31, lou_y);
+      assignv(lou_disty, v31);
+   }
+   else {
+      subv(lou_y, v31);
+      assignv(lou_disty, lou_y);
+  }
+
+   if (lessn(lou_distx, 5) && lessn(lou_disty, 5)) {
+      stop.cycling(lou);
+      stop.motion(lou);
+   }
+
+   if ((!lessn(lou_distx, 7) || !lessn(lou_disty, 7))) {
+      start.cycling(lou);
+      get.posn(ego, v30, v31);
+      move.obj.v(lou, v30, v31, 2, lou_reached_target);
+   }
+}
+
+get.posn(ego, v30, v31);
+
+if (said("look")) {
+   print("You are in the hallway.");
+}
+
+if ((v30 < 45) && (v31 > 140))
+{
+  new.room(6);
+}
+
+if (v31 < 88)
+{
+  new.room(14);
+}
+
+if ((v30 > 124) && (v31 < 120) && (v31 > 100))
+{
+  if (isset(rob_satisfied)) {
+    new.room(19);
+  }
+  else {
+    print("Can't enter, too many things are in the way.");
+    erase(ego);
+    position(ego,110,110);
+    v6 = 7;
+    draw(ego);
+  }
+}
+
+if (ego_edge_code == bottom_edge) {   // ego touching bottom edge of screen
+  new.room(15);
+}
+
+return();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,693 @@
+// ****************************************************************************
+//
+// Logic 22: Endgame chicken catch sequence
+//
+// ****************************************************************************
+
+#include "defines.txt"
+#define rita o1
+#define roadline_1  o12
+#define roadline_2   o13
+#define roadline_3   o14
+#define roadline_4   o15
+
+if (new_room) {
+
+  load.pic(room_no);
+  draw.pic(room_no);
+  discard.pic(room_no);
+  set.horizon(0);
+
+
+  show.pic();
+
+  animate.obj(roadline_1);
+  load.view(12);
+  set.view(roadline_1,12);
+  set.loop(roadline_1,0); 
+  set.cel(roadline_1,0); 
+  position(roadline_1,0,21); 
+  set.priority(roadline_1,12);
+  ignore.objs(roadline_1);
+  draw(roadline_1);
+
+  animate.obj(roadline_2);
+  load.view(12);
+  set.view(roadline_2,12);
+  set.loop(roadline_2,0); 
+  set.cel(roadline_2,0); 
+  position(roadline_2,0,65); 
+  set.priority(roadline_2,12);
+  ignore.objs(roadline_2);
+  draw(roadline_2);
+
+  animate.obj(roadline_3);
+  load.view(12);
+  set.view(roadline_3,12);
+  set.loop(roadline_3,0); 
+  set.cel(roadline_3,0); 
+  position(roadline_3,0,106); 
+  set.priority(roadline_3,12);
+  ignore.objs(roadline_3);
+  draw(roadline_3);
+
+  animate.obj(roadline_4);
+  load.view(12);
+  set.view(roadline_4,12);
+  set.loop(roadline_4,0); 
+  set.cel(roadline_4,0); 
+  position(roadline_4,0,148); 
+  set.priority(roadline_4,12);
+  ignore.objs(roadline_4);
+  draw(roadline_4);
+
+  animate.obj(bmw);
+  load.view(13);
+  set.view(bmw,13);
+  set.loop(bmw,0); 
+  set.cel(bmw,0); 
+  position(bmw,0,118); 
+  set.priority(bmw,14);
+  ignore.objs(bmw);
+  draw(bmw);
+
+  small_counter = 0;
+  big_counter = 0;
+  cycle_delay=1;
+
+  //Reset all flags
+  reset(dummy_flag);
+  reset(car_1_started);
+  reset(car_1_passed);
+  reset(car_2_started);
+  reset(car_2_passed);
+  reset(car_3_started);
+  reset(car_3_passed);
+  reset(car_4_started);
+  reset(car_4_passed);
+
+  bmw_x = 0;
+  bmw_y = 0;
+  car_1_x = 100;
+  car_1_y = 0;
+  car_1_ydist = 0;
+  car_1_cel = 0;
+  car_1_loop = 0;
+  car_2_x = 100;
+  car_2_y = 0;
+  car_2_ydist = 0;
+  car_2_cel = 0;
+  car_2_loop = 0;
+  car_3_x = 100;
+  car_3_y = 0;
+  car_3_ydist = 0;
+  car_3_cel = 0;
+  car_3_loop = 0;
+  car_4_x = 100;
+  car_4_y = 0;
+  car_4_ydist = 0;
+  car_4_cel = 0;
+   car_4_loop = 0;
+}
+
+if (equaln(small_counter, 158)) {
+   small_counter = 0;
+   if (equaln(big_counter, 164)) {
+       big_counter = 0;
+   }
+   else {
+       addn(big_counter,1);
+   }
+}
+else {
+   addn(small_counter, 1);
+}
+
+//Blue car sequence
+if (!isset(car_1_started)) {
+   if (equaln(big_counter, 1)) {
+       
+       animate.obj(o3);
+       load.view(14);
+       set.view(o3,14);
+       set.loop(o3,1); 
+       set.cel(o3,0); 
+       position(o3,137,118); 
+       set.priority(o3,14);
+       ignore.objs(o3);
+       draw(o3);
+
+       set(car_1_started);
+       reset(car_1_passed);
+   }
+   else {
+        if (equaln(big_counter, 2) && equaln(small_counter, 150)) {
+            position(o3,137,76);
+            set.loop(o3,1);
+            start.cycling(o3);
+            set(car_1_started);
+            reset(car_1_passed);
+        }
+        else {
+            if (equaln(big_counter, 5) && equaln(small_counter, 20)) {
+               position(o3,137,34);
+               set.loop(o3,1);
+               start.cycling(o3);
+               set(car_1_started);
+               reset(car_1_passed);
+           }
+           else {
+               if (equaln(big_counter, 6) && equaln(small_counter, 70)) {
+                  position(o3,137,160);
+                  set.loop(o3,1);
+                  start.cycling(o3);
+                  set(car_1_started);
+                  reset(car_1_passed);
+               }
+               else {
+                  if (equaln(big_counter, 7) && equaln(small_counter, 130)) {
+                     position(o3,137,118);
+                     set.loop(o3,1);
+                     start.cycling(o3);
+                     set(car_1_started);
+                     reset(car_1_passed);
+                  }
+                  else {
+                     if (equaln(big_counter, 9) && equaln(small_counter, 10)) {
+                        position(o3,137,160);
+                        set.loop(o3,1);
+                        start.cycling(o3);
+                        set(car_1_started);
+                        reset(car_1_passed);
+                     }
+                  }
+               }
+           }
+        }
+   }
+}
+else {
+   get.posn(o3, car_1_x, car_1_y);
+   if (greatern(car_1_x,0)) {
+
+      current.loop(o3, car_1_loop);
+      if (equaln(car_1_loop, 1)) {
+         current.cel(o3, car_1_cel);
+         if (equaln(car_1_cel, 22)) {
+            set.loop(o3,0);
+         }
+      }
+      else {
+         get.posn(o3, car_1_x, car_1_y);
+         subn(car_1_x, 1);
+         position.v(o3, car_1_x, car_1_y);
+      }
+   }
+   else {
+      if (equaln(car_1_x,0) && !isset(car_1_passed)) {
+         set.loop(o3,2);
+      }
+
+      current.cel(o3, car_1_cel);
+      if (equaln(car_1_cel,22) && equaln(car_1_x,0)) {
+         stop.cycling(o3);
+         set.cel(o3,22);
+         set(car_1_passed);
+         reset(car_1_started);
+      }
+   }
+}
+
+//Green car sequence
+if (!isset(car_2_started)) {
+   if (equaln(big_counter, 1) && equaln(small_counter, 60)) {
+       
+       animate.obj(o4);
+       load.view(16);
+       set.view(o4,16);
+       set.loop(o4,1); 
+       set.cel(o4,0); 
+       position(o4,137,76); 
+       set.priority(o4,14);
+       ignore.objs(o4);
+       draw(o4);
+
+       set(car_2_started);
+       reset(car_2_passed);
+   }
+   else {
+        if (equaln(big_counter, 3) && equaln(small_counter, 120)) {
+            position(o4,137,118);
+            set.loop(o4,1);
+            start.cycling(o4);
+            set(car_2_started);
+            reset(car_2_passed);
+        }
+        else {
+           if (equaln(big_counter, 5) && equaln(small_counter, 100)) {
+               position(o4,137,118);
+               set.loop(o4,1);
+               start.cycling(o4);
+               set(car_2_started);
+               reset(car_2_passed);
+            }
+            else {
+               if (equaln(big_counter, 7) && equaln(small_counter, 5)) {
+                  position(o4,137,34);
+                  set.loop(o4,1);
+                  start.cycling(o4);
+                  set(car_2_started);
+                  reset(car_2_passed);
+               }
+               else {
+                  if (equaln(big_counter, 8) && equaln(small_counter, 50)) {
+                     position(o4,137,160);
+                     set.loop(o4,1);
+                     start.cycling(o4);
+                     set(car_2_started);
+                     reset(car_2_passed);
+                  }
+                  else {
+                  if (equaln(big_counter, 9) && equaln(small_counter, 125)) {
+                        position(o4,137,34);
+                        set.loop(o4,1);
+                        start.cycling(o4);
+                        set(car_2_started);
+                        reset(car_2_passed);
+                     }
+                  }
+              }
+            }
+        }
+   }
+}
+else {
+   get.posn(o4, car_2_x, car_2_y);
+   if (greatern(car_2_x,0)) {
+
+      current.loop(o4, car_2_loop);
+      if (equaln(car_2_loop, 1)) {
+         current.cel(o4, car_2_cel);
+         if (equaln(car_2_cel, 22)) {
+            set.loop(o4,0);
+         }
+      }
+      else {
+         get.posn(o4, car_2_x, car_2_y);
+         subn(car_2_x, 1);
+         position.v(o4, car_2_x, car_2_y);
+      }
+   }
+   else {
+      if (equaln(car_2_x,0) && !isset(car_2_passed)) {
+         set.loop(o4,2);
+      }
+
+      current.cel(o4, car_2_cel);
+      if (equaln(car_2_cel,22) && equaln(car_2_x,0)) {
+         stop.cycling(o4);
+         set.cel(o4,22);
+         set(car_2_passed);
+         reset(car_2_started);
+      }
+   }
+}
+
+//Pink truck sequence
+if (!isset(car_3_started)) {
+   if (equaln(big_counter, 1) && equaln(small_counter, 15)) {
+       
+       animate.obj(o5);
+       load.view(17);
+       set.view(o5,17);
+       set.loop(o5,1); 
+       set.cel(o5,0); 
+       position(o5,137,160); 
+       set.priority(o5,14);
+       ignore.objs(o5);
+       draw(o5);
+
+       set(car_3_started);
+       reset(car_3_passed);
+   }
+   else {
+        if (equaln(big_counter, 3) && equaln(small_counter, 30)) {
+            position(o5,137,118);
+            set.loop(o5,1);
+            start.cycling(o5);
+            set(car_3_started);
+            reset(car_3_passed);
+        }
+        else {
+           if (equaln(big_counter, 5) && equaln(small_counter, 40)) {
+               position(o5,137,76);
+               set.loop(o5,1);
+               start.cycling(o5);
+               set(car_3_started);
+               reset(car_3_passed);
+            }
+            else {
+              if (equaln(big_counter, 6) && equaln(small_counter, 90)) {
+                  position(o5,137,118);
+                  set.loop(o5,1);
+                  start.cycling(o5);
+                  set(car_3_started);
+                  reset(car_3_passed);
+               }
+               else {
+                 if (equaln(big_counter, 7) && equaln(small_counter, 150)) {
+                     position(o5,137,76);
+                     set.loop(o5,1);
+                     start.cycling(o5);
+                     set(car_3_started);
+                     reset(car_3_passed);
+                  }
+                  else {
+                    if (equaln(big_counter, 9) && equaln(small_counter, 30)) {
+                        position(o5,137,118);
+                        set.loop(o5,1);
+                        start.cycling(o5);
+                        set(car_3_started);
+                        reset(car_3_passed);
+                     }
+                  }
+               }
+            }
+        }
+   }
+}
+else {
+   get.posn(o5, car_3_x, car_3_y);
+   if (greatern(car_3_x,0)) {
+
+      current.loop(o5, car_3_loop);
+      if (equaln(car_3_loop, 1)) {
+         current.cel(o5, car_3_cel);
+         if (equaln(car_3_cel, 22)) {
+            set.loop(o5,0);
+         }
+      }
+      else {
+         get.posn(o5, car_3_x, car_3_y);
+         subn(car_3_x, 1);
+         position.v(o5, car_3_x, car_3_y);
+      }
+   }
+   else {
+      if (equaln(car_3_x,0) && !isset(car_3_passed)) {
+         set.loop(o5,2);
+      }
+
+      current.cel(o5, car_3_cel);
+      if (equaln(car_3_cel,22) && equaln(car_3_x,0)) {
+         stop.cycling(o5);
+         set.cel(o5,22);
+         set(car_3_passed);
+         reset(car_3_started);
+      }
+   }
+}
+
+//Cicquecinqo sequence
+if (!isset(car_4_started)) {
+   if (equaln(big_counter, 1) && equaln(small_counter, 20)) {
+       
+       animate.obj(o6);
+       load.view(15);
+       set.view(o6,15);
+       set.loop(o6,1); 
+       set.cel(o6,0); 
+       position(o6,137,34); 
+       set.priority(o6,14);
+       ignore.objs(o6);
+       draw(o6);
+
+       set(car_4_started);
+       reset(car_4_passed);
+   }
+   else {
+        if (equaln(big_counter, 3) && equaln(small_counter, 120)) {
+            position(o6,137,160);
+            set.loop(o6,1);
+            start.cycling(o6);
+            set(car_4_started);
+            reset(car_4_passed);
+        }
+        else {
+           if (equaln(big_counter, 5) && equaln(small_counter, 60)) {
+               position(o6,137,118);
+               set.loop(o6,1);
+               start.cycling(o6);
+               set(car_4_started);
+               reset(car_4_passed);
+           }
+           else {
+              if (equaln(big_counter, 6) && equaln(small_counter, 110)) {
+                  position(o6,137,76);
+                  set.loop(o6,1);
+                  start.cycling(o6);
+                  set(car_4_started);
+                  reset(car_4_passed);
+               }
+               else {
+                 if (equaln(big_counter, 7) && equaln(small_counter, 150)) {
+                    position(o6,137,34);
+                     set.loop(o6,1);
+                     start.cycling(o6);
+                     set(car_4_started);
+                     reset(car_4_passed);
+                  }
+                  else {
+                     if (equaln(big_counter, 9) && equaln(small_counter, 30)) {
+                        position(o6,137,76);
+                        set.loop(o6,1);
+                        start.cycling(o6);
+                        set(car_4_started);
+                        reset(car_4_passed);
+                     }
+                  }
+               }
+           }
+        }
+   }
+}
+else {
+   get.posn(o6, car_4_x, car_4_y);
+   if (greatern(car_4_x,0)) {
+
+      current.loop(o6, car_4_loop);
+      if (equaln(car_4_loop, 1)) {
+         current.cel(o6, car_4_cel);
+         if (equaln(car_4_cel, 22)) {
+            set.loop(o6,0);
+         }
+      }
+      else {
+         get.posn(o6, car_4_x, car_4_y);
+         subn(car_4_x, 1);
+         position.v(o6, car_4_x, car_4_y);
+      }
+   }
+   else {
+      if (equaln(car_4_x,0) && !isset(car_4_passed)) {
+         set.loop(o6,2);
+      }
+
+      current.cel(o6, car_4_cel);
+      if (equaln(car_4_cel,22) && equaln(car_4_x,0)) {
+         stop.cycling(o6);
+         set.cel(o6,22);
+         set(car_4_passed);
+         reset(car_4_started);
+      }
+   }
+}
+
+//collision detection
+get.posn(bmw, bmw_x, bmw_y);
+get.posn(o3, car_1_x, car_1_y);
+if (lessn(car_1_x, 27)) {
+   if (isset(car_1_started)) {
+      if (greaterv(bmw_y, car_1_y)) {
+         subv(bmw_y, car_1_y);
+         assignv(car_1_ydist, bmw_y);
+      }
+      else {
+         subv(car_1_y, bmw_y);
+         assignv(car_1_ydist, car_1_y);
+      }
+
+      if (lessn(car_1_ydist, 15)) {
+         print("Colision! You have suffered from hyperdeath. Game over.");
+         restart.game();
+      }
+   }
+}
+
+get.posn(bmw, bmw_x, bmw_y);
+get.posn(o4, car_2_x, car_2_y);
+if (lessn(car_2_x, 27)) {
+   if (isset(car_2_started)) {
+      if (greaterv(bmw_y, car_2_y)) {
+         subv(bmw_y, car_2_y);
+         assignv(car_2_ydist, bmw_y);
+      }
+      else {
+         subv(car_2_y, bmw_y);
+         assignv(car_2_ydist, car_2_y);
+      }
+
+      if (lessn(car_2_ydist, 15)) {
+         print("Colision! You have suffered from hyperdeath. Game over.");
+         restart.game();
+      }
+   }
+}
+
+get.posn(bmw, bmw_x, bmw_y);
+get.posn(o5, car_3_x, car_3_y);
+if (lessn(car_3_x, 27)) {
+   if (isset(car_3_started)) {
+      if (greaterv(bmw_y, car_3_y)) {
+         subv(bmw_y, car_3_y);
+         assignv(car_3_ydist, bmw_y);
+      }
+      else {
+         subv(car_3_y, bmw_y);
+         assignv(car_3_ydist, car_3_y);
+      }
+
+      if (lessn(car_3_ydist, 15)) {
+         print("Colision! You have suffered from hyperdeath. Game over.");
+         restart.game();
+      }
+   }
+}
+
+get.posn(bmw, bmw_x, bmw_y);
+get.posn(o6, car_4_x, car_4_y);
+if (lessn(car_4_x, 27)) {
+   if (isset(car_4_started)) {
+      if (greaterv(bmw_y, car_4_y)) {
+         subv(bmw_y, car_4_y);
+         assignv(car_4_ydist, bmw_y);
+      }
+      else {
+         subv(car_4_y, bmw_y);
+         assignv(car_4_ydist, car_4_y);
+      }
+
+      if (lessn(car_4_ydist, 15)) {
+         print("Colision! You have suffered from hyperdeath. Game over.");
+         restart.game();
+      }
+   }
+}
+
+
+//BMW control logic
+get.posn(bmw, bmw_x, bmw_y);
+
+if (said("turn", "left")) {
+   if (equaln(bmw_y, 118)) {
+      move.obj(bmw, 1, 76, 1, dummy_flag);
+   }
+   else {
+       if (equaln(bmw_y, 76)) {
+         move.obj(bmw, 1, 34, 1, dummy_flag);
+      }
+      else {
+          if (equaln(bmw_y, 160)) {
+            move.obj(bmw, 1, 118, 1, dummy_flag);
+         }
+      }
+   }
+}
+
+if (said("turn", "right")) {
+   if (equaln(bmw_y, 118)) {
+      move.obj(bmw, 1, 160, 1, dummy_flag);
+   }
+   else {
+       if (equaln(bmw_y, 76)) {
+         move.obj(bmw, 1, 118, 1, dummy_flag);
+      }
+      else {
+          if (equaln(bmw_y, 34)) {
+            move.obj(bmw, 1, 76, 1, dummy_flag);
+         }
+      }
+   }
+}
+
+//Chicken catcherer firing handler
+if (said("fire", "catcherer")) {
+   if (equaln(big_counter, 10) && greatern(small_counter, 30) && lessn(small_counter, 70)) {
+      print("A direct hit! Rita has been caught!");
+      erase(rita);
+      set(rita_catched);
+   }
+   else {
+      print("Uh oh, spagettios! You wasted your one and only chicken catcherer. All of that was for nothing! Ahh!");
+   }
+}
+
+//Chicken entry
+if (equaln(big_counter, 9) && equaln(small_counter, 150)) {
+  animate.obj(rita);
+  load.view(20);
+  set.view(rita,20);
+  set.loop(rita,0); 
+  set.cel(rita,0); 
+  position(rita,137,76); 
+  set.priority(rita,14);
+  ignore.objs(rita);
+  draw(rita);
+  move.obj(rita, 137, 34, 1, dummy_flag);
+
+}
+
+//End game
+if (equaln(big_counter, 10) && equaln(small_counter, 150)) {
+   if (isset(rita_catched)) {
+      new.room(25);
+   }
+   else {
+      print("You missed the moment of opertunity to fire the chicken catcherer. Rita has flown away for good (probably to mexico)!");
+      restart.game();
+   }
+}
+
+return();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

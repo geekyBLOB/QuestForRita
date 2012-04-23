@@ -1,0 +1,255 @@
+// ****************************************************************************
+//
+// Logic 6: Rob's room
+//
+// ****************************************************************************
+
+#include "defines.txt"
+
+if (new_room) {
+  load.pic(room_no);
+  draw.pic(room_no);
+  discard.pic(room_no);
+  set.horizon(37);
+
+ if (prev_room_no == 13) {
+     v6 = 1;
+     position(ego,47,162);
+ }
+
+  draw(ego);
+  show.pic();
+
+    animate.obj(rob);
+    load.view(4);
+    set.view(rob,4);
+    set.loop(rob,0); 
+    set.cel(rob,0); 
+    position(rob,74,133); 
+    set.priority(rob,12);
+    ignore.objs(rob);
+    draw(rob); 
+    reset(rob_reached_target);
+    move.obj(rob, 45, 133, 1, rob_reached_target);
+
+  if (isset(johannes_going_to_cook))
+  {
+       animate.obj(johannes);
+       load.view(5);
+       set.view(johannes,5);
+       set.loop(johannes,0); 
+       set.cel(johannes,0); 
+       get.posn(ego, v30, v31);
+       addn(v30,5);
+       position.v(johannes,v30,v31); 
+       set.priority(johannes,11);
+       ignore.objs(johannes);
+       draw(johannes);
+       reset(johannes_reached_target);
+       get.posn(ego, v30, v31);
+       move.obj.v(johannes, v30, v31, 2, johannes_reached_target);
+  }
+
+  if (isset(lou_accepted_invite))
+  {
+       animate.obj(lou);
+       load.view(8);
+       set.view(lou,8);
+       set.loop(lou,0); 
+       set.cel(lou,0); 
+       get.posn(ego, v30, v31);
+       addn(v30,5);
+       position.v(lou,v30,v31); 
+       set.priority(lou,11);
+       ignore.objs(lou);
+       draw(lou);
+       reset(lou_reached_target);
+       get.posn(ego, v30, v31);
+       move.obj.v(lou, v30, v31, 2, lou_reached_target);
+  }
+}
+
+if (isset(johannes_going_to_cook)) {
+   get.posn(johannes, johannes_x, johannes_y);
+   get.posn(ego, v30, v31);
+
+   if (greaterv(v30, johannes_x)) {
+      subv(v30, johannes_x);
+      assignv(johannes_distx, v30);
+   }
+   else {
+      subv(johannes_x, v30);
+      assignv(johannes_distx, johannes_x);
+   }
+
+   if (greaterv(v31, johannes_y)) {
+      subv(v31, johannes_y);
+      assignv(johannes_disty, v31);
+   }
+   else {
+      subv(johannes_y, v31);
+      assignv(johannes_disty, johannes_y);
+  }
+
+   if (lessn(johannes_distx, 5) && lessn(johannes_disty, 5)) {
+      stop.cycling(johannes);
+      stop.motion(johannes);
+   }
+
+   if ((!lessn(johannes_distx, 7) || !lessn(johannes_disty, 7))) {
+      start.cycling(johannes);
+      get.posn(ego, v30, v31);
+      move.obj.v(johannes, v30, v31, 2, johannes_reached_target);
+   }
+}
+
+if (isset(lou_accepted_invite)) {
+   get.posn(lou, lou_x, lou_y);
+   get.posn(ego, v30, v31);
+
+   if (greaterv(v30, lou_x)) {
+      subv(v30, lou_x);
+      assignv(lou_distx, v30);
+   }
+   else {
+      subv(lou_x, v30);
+      assignv(lou_distx, lou_x);
+   }
+
+   if (greaterv(v31, lou_y)) {
+      subv(v31, lou_y);
+      assignv(lou_disty, v31);
+   }
+   else {
+      subv(lou_y, v31);
+      assignv(lou_disty, lou_y);
+  }
+
+   if (lessn(lou_distx, 5) && lessn(lou_disty, 5)) {
+      stop.cycling(lou);
+      stop.motion(lou);
+   }
+
+   if ((!lessn(lou_distx, 7) || !lessn(lou_disty, 7))) {
+      start.cycling(lou);
+      get.posn(ego, v30, v31);
+      move.obj.v(lou, v30, v31, 2, lou_reached_target);
+   }
+}
+
+if (isset(rob_reached_target)) {
+   if (posn(rob, 74, 133, 74, 133)) {
+     reset(rob_reached_target);
+     move.obj(rob, 45, 133, 1, rob_reached_target);
+   }
+   else {
+      if (posn(rob, 45, 133, 45, 133)) {
+         reset(rob_reached_target);
+         move.obj(rob, 74, 133, 1, rob_reached_target);
+      }
+   }
+}
+
+get.posn(ego, v30, v31);
+
+if (said("look")) {
+   print("You are in Rob's room.");
+}
+
+if (said("speak", "Rob"))
+{
+   if (isset(rob_satisfied)) {
+      print(" You should be able to access the shed lathe from any computer conneted to the network.");
+   }
+   else {
+      if (isset(rob_wants_biscuits)) {
+          print("I need custard creams!!!!");
+      }
+      else {
+          if (isset(rob_wants_tea)) {
+               print("Hacking requires tea!Bees!");
+          }
+          else {
+                if (isset(faye_spoken_to_paul)) {
+                   print("Faye: Paul needs a spondulix for the chicken catcherer, where do I get one from?");
+                   print("Rob: You could use the CNC lathe in the shed to print one. You should be able to access it from any computer conneted to the network.");
+                   print("Rob: Oh facemachines! The drivers don't exist yet, some hacking is required.");
+                   print("Faye: Go go do it do it.");
+                   print("Hacking requires tea!");
+                   set (rob_wants_tea);
+                   set(kettle_flag);
+                }
+                else {
+                   if (!isset(keys_available)) {
+                      print("Faye: Hey Rob, have you seen my keys anywhere? I need to go and find Rita.");
+                      print("Rob: I saw them in the kitchen, I think Jeff was doing some experiments.");
+                      set(keys_available);
+                   }
+                   else {
+                       print("Have you checked the kitchen for your keys?");
+                   }
+                }
+          }
+      }
+   }
+}
+
+if (said("give", "tea"))
+{
+   if (has("tea")) {
+      if (isset(rob_wants_biscuits)) {
+          print("I'm still on my first thanks!");
+      }
+      else {
+         drop("tea");
+         print("Yes! Tea. Hacking also requires biscuits");
+         set(rob_wants_biscuits);
+      }
+   }
+   else {
+      print("You don't have any tea.");
+   }
+}
+
+if (said("give", "custard creams"))
+{
+   if (has("custard creams"))
+   {
+       if (isset(rob_satisfied)) {
+          print("I'm too full of custard creams thanks!");
+      }
+      else {
+          drop("custard creams");
+          print("Rob: Yes! Custard creams!");
+          print("(tap tap tap tap tap tap tap tap)");
+          print("Rob: Done, ship it.");
+          set(rob_satisfied);       
+      }
+   }
+}
+
+if (ego_edge_code == bottom_edge) {   // ego touching bottom edge of screen
+  new.room(13);
+}
+
+return();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,73 @@
+// ****************************************************************************
+//
+// Logic 1: Computer
+//
+// ****************************************************************************
+
+#include "defines.txt"
+
+if (new_room) {
+  load.pic(room_no);
+  draw.pic(room_no);
+  discard.pic(room_no);
+  set.horizon(37);
+  status.line.off();
+  show.pic();
+  display(3,3,"root@lathe's password:");
+  reset(access_granted);
+}
+if(isset(access_granted)) {
+   if(said("latheprint")) {
+        display(6,3,"Argument not given!");
+        display(7,3, "CORRECT USAGE: latheprint <object>");
+   }
+   else {
+        if (said("latheprint", "spondulix")) {
+             display(7,3,"                                  ");
+             display(6,3, "Printing spodulix....  ");
+             set(shed_open);
+             display(7,3, "Done");
+        }
+        else {
+              if (said("ls")) {
+                  display(6,3, "latheprint                  ");
+                  display(7,3, "                                  ");    
+              }
+              else {
+                  if (said("exit")) {
+                     new.room(5);
+                  }
+                  else {
+                      if(said("anyword")) {
+                         print("Command not recognised.");
+                      }
+                  }
+              }
+        }
+   }
+}
+else {
+   if(said("exit")) {
+      new.room(5);
+   }
+   else {
+      if(said("noeledmunds")) {
+         display(4,3,"Access granted");
+         display(5,3,"root@lathe:~$");
+         set(access_granted);
+      }
+      else {
+          if(said("anyword")) {
+              print("Invalid password.");
+          }
+      }
+   }
+}
+
+return();
+
+
+
+
+
+
